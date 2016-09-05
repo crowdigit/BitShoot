@@ -20,9 +20,6 @@ section .data
     mode:       db "rb", 0
     fail_open:  db "error: Failed to open file ", 34, "%s", 34, 33, 10, 0
 
-    tmp:        db "%s", 10, 0
-    extern printf
-
 section .text
 
 LoadProgram:
@@ -33,13 +30,21 @@ LoadProgram:
     mov     QWORD [rbp - 0x8], rdi      ; store vertex shader filename
     mov     QWORD [rbp - 0x10], rsi     ; store fragment shader filename
 
-    ; mov     DWORD [rbp - 0x14], GL_VERTEX_SHADER
-    ; mov     DWORD [rbp - 0x18], GL_FRAGMENT_SHADER
+    call    [glCreateProgram]
+    mov     DWORD [rbp - 0x14], eax
 
-    mov     DWORD [rbp - 0x1c], 2       ; open file iteration number
+    mov     rdi, GL_VERTEX_SHADER
+    call    [glCreateShader]
+    mov     DWORD [rbp - 0x18], eax
+
+    mov     rdi, GL_FRAGMENT_SHADER
+    call    [glCreateShader]
+    mov     DWORD [rbp - 0x1c], eax
+
+    mov     DWORD [rbp - 0x20], 2       ; open file iteration number
 
 loop_openfile:
-    mov     eax, DWORD [rbp - 0x1c]
+    mov     eax, DWORD [rbp - 0x20]
     mov     rdi, QWORD [rbp + 0x8 * rax - 0x18]
 
     mov     rsi, mode
@@ -51,57 +56,98 @@ loop_openfile:
 
     mov     rdi, [stderr]
     mov     rsi, fail_open
-    mov     eax, DWORD [rbp - 0x1c]
+    mov     eax, DWORD [rbp - 0x20]
     mov     rdx, QWORD [rbp + 0x8 * rax - 0x18]
     xor     rax, rax
     call    fprintf
     jmp     openfile_next
 
 openfile_ok:
-    mov     QWORD [rbp - 0x24], rax
+    mov     QWORD [rbp - 0x28], rax
     mov     rdi, rax
     mov     rsi, 0
     mov     rdx, SEEK_END
     call    fseek
 
-    mov     rdi, QWORD [rbp - 0x24]
+    mov     rdi, QWORD [rbp - 0x28]
     call    ftell
     inc     rax
     mov     rdi, rax
     call    malloc
-    mov     QWORD [rbp - 0x2c], rax
+    mov     QWORD [rbp - 0x30], rax
 
-    mov     rdi, QWORD [rbp - 0x24]
+    mov     rdi, QWORD [rbp - 0x28]
     mov     rsi, 0
     mov     rdx, SEEK_SET
     call    fseek
 
     loop_getline:
-        mov     rdi, QWORD [rbp - 0x24]
+        mov     rdi, QWORD [rbp - 0x28]
         call    ftell
-        add     rax, QWORD [rbp - 0x2c]
+        add     rax, QWORD [rbp - 0x30]
         mov     rdi, rax
         mov     rsi, 0xff
-        mov     rdx, QWORD [rbp - 0x24]
+        mov     rdx, QWORD [rbp - 0x28]
         call    fgets
         cmp     rax, 0
         jne     loop_getline
 
-    mov     rdi, tmp
-    mov     rsi, QWORD [rbp - 0x2c]
-    xor     rax, rax
-    call    printf
+    ; glShaderSource
 
-    mov     rdi, QWORD [rbp - 0x2c]
+    mov     rdi, QWORD [rbp - 0x28]
+    call    ftell
+    inc     rax
+    mov     DWORD [rbp - 0x34], eax
+
+    mov     eax, DWORD [rbp - 0x20]
+    mov     edi, DWORD [rbp + 0x4 * rax - 0x20]
+    mov     DWORD [rbp - 0x38], edi
+    mov     rsi, 1
+    lea     rdx, [rbp - 0x30]
+    lea     rcx, [rbp - 0x34]
+    call    [glShaderSource]
+
+    mov     edi, DWORD [rbp - 0x38]
+    call    [glCompileShader]
+
+    mov     edi, DWORD [rbp - 0x38]
+    mov     rsi, GL_COMPILE_STATUS
+    lea     rdx, [rbp - 0x3c]
+    call    [glGetShaderiv]
+    cmp     DWORD [rbp - 0x3c], 1
+    je      compile_ok
+
+    ; If compiling failed
+
+    tmp:
+
+    mov     edi, DWORD [rbp - 0x38]
+    mov     rsi, GL_INFO_LOG_LENGTH
+    lea     rdx, [rbp - 0x3c]
+    call    [glGetShaderiv]
+
+    mov     rdi, QWORD [rbp - 0x30]
     call    free
 
-    mov     rdi, QWORD [rbp - 0x24]
+    mov     edi, DWORD [rbp - 0x3c]
+    call    malloc
+    mov     QWORD [rbp - 0x30], rax
+
+    mov     rdi, QWORD [rbp - 0x30]
+    call    free
+
+compile_ok:
+
+    mov     rdi, QWORD [rbp - 0x30]
+    call    free
+
+    mov     rdi, QWORD [rbp - 0x28]
     call    fclose
 
 openfile_next:
 
-    dec     DWORD [rbp - 0x1c]
-    cmp     DWORD [rbp - 0x1c], 0
+    dec     DWORD [rbp - 0x20]
+    cmp     DWORD [rbp - 0x20], 0
     jg      loop_openfile
 
     add     rsp, 0x40
