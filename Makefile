@@ -1,6 +1,6 @@
 TARGET = hello
 
-OBJS = main.o loop.o shader.o
+OBJS = main.o loop.o shader.o obj.o error.o transform.o vec.o test.o
 FLAG = -felf64
 
 INCDIR = -I/usr/include/SDL2
@@ -11,6 +11,9 @@ all : $(OBJS)
 
 %.o : %.asm
 	nasm -o $@ $< $(FLAG)
+
+%.co : %.cpp
+	g++ -Wall -c -o $@ $<
 
 run :
 	./$(TARGET)

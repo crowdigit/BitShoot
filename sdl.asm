@@ -28,6 +28,7 @@ extern SDL_GL_SwapWindow
 extern SDL_GL_CreateContext
 extern SDL_GL_DeleteContext
 extern SDL_GetKeyboardState
+extern SDL_GL_SetAttribute
 
 STRUC Event
     .type:       resd 1
@@ -295,3 +296,6 @@ ENDSTRUC
 %define SDL_SCANCODE_APP2 284
 
 %define SDL_NUM_SCANCODES 512
+
+%define SDL_GL_CONTEXT_MAJOR_VERSION 0x11
+%define SDL_GL_CONTEXT_MINOR_VERSION 0x12

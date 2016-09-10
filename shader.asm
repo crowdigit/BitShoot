@@ -14,6 +14,8 @@
     extern fgets
     extern rewind
 
+    extern err
+
     global LoadProgram
 
 section .data
@@ -119,8 +121,6 @@ openfile_ok:
 
     ; If compiling failed
 
-    tmp:
-
     mov     edi, DWORD [rbp - 0x38]
     mov     rsi, GL_INFO_LOG_LENGTH
     lea     rdx, [rbp - 0x3c]
@@ -133,8 +133,25 @@ openfile_ok:
     call    malloc
     mov     QWORD [rbp - 0x30], rax
 
+    mov     rcx, rax
+    mov     edi, DWORD [rbp - 0x38]
+    mov     esi, DWORD [rbp - 0x3c]
+    xor     rdx, rdx
+    call    [glGetShaderInfoLog]
+
+    mov     rdi, [stderr]
+    mov     rsi, err
+    mov     rdx, QWORD [rbp - 0x30]
+    xor     rax, rax
+    call    fprintf
+
     mov     rdi, QWORD [rbp - 0x30]
     call    free
+
+    mov     rdi, QWORD [rbp - 0x28]
+    call    fclose
+
+    jmp     openfile_next
 
 compile_ok:
 
@@ -144,13 +161,66 @@ compile_ok:
     mov     rdi, QWORD [rbp - 0x28]
     call    fclose
 
+    mov     edi, DWORD [rbp - 0x14]
+    mov     esi, DWORD [rbp - 0x38]
+    call    [glAttachShader]
+
 openfile_next:
 
     dec     DWORD [rbp - 0x20]
     cmp     DWORD [rbp - 0x20], 0
     jg      loop_openfile
 
+    mov     edi, DWORD [rbp - 0x14]
+    call    [glLinkProgram]
+
+    mov     edi, DWORD [rbp - 0x14]
+    mov     rsi, GL_LINK_STATUS
+    lea     rdx, [rbp - 0x3c]
+    call    [glGetProgramiv]
+    cmp     DWORD [rbp - 0x3c], 1
+    je      link_ok
+
+    mov     edi, DWORD [rbp - 0x14]
+    mov     rsi, GL_INFO_LOG_LENGTH
+    lea     rdx, [rbp - 0x3c]
+    call    [glGetProgramiv]
+
+    mov     edi, DWORD [rbp - 0x3c]
+    call    malloc
+    mov     QWORD [rbp - 0x30], rax
+
+    mov     rcx, rax
+    mov     edi, DWORD [rbp - 0x14]
+    mov     esi, DWORD [rbp - 0x3c]
+    xor     rdx, rdx
+    call    [glGetProgramInfoLog]
+
+    mov     rdi, [stderr]
+    mov     rsi, err
+    mov     rdx, QWORD [rbp - 0x30]
+    xor     rax, rax
+    call    fprintf
+
+    mov     rdi, QWORD [rbp - 0x30]
+    call    free
+    
+link_ok:
+
+    mov     DWORD [rbp - 0x38], 2
+loop_release:
+    mov     eax, DWORD [rbp - 0x38]
+    mov     edi, DWORD [rbp - 0x14]
+    mov     esi, DWORD [rbp + 0x4 * rax - 0x20]
+    call    [glDetachShader]
+    mov     eax, DWORD [rbp - 0x38]
+    mov     edi, DWORD [rbp + 0x4 * rax - 0x20]
+    call    [glDeleteShader]
+    dec     DWORD [rbp - 0x38]
+    cmp     DWORD [rbp - 0x38], 0
+    jg      loop_release
+
+    mov     eax, DWORD [rbp - 0x14]
     add     rsp, 0x40
     pop     rbp
-    xor     rax, rax
     ret
