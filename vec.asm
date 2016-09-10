@@ -72,7 +72,9 @@ mat4mat4mul_loop:
     mov     r9d, 4
     mul     r9d
     lea     rsi, [rsi + rax * 0x4]          ; row
-    lea     rdi, [rbp - 0x30]                ; column
+    lea     rdi, [rbp - 0x30]               ; column
+
+    tmp:
 
     mov     eax, ebx
     mov     r9d, 4
@@ -95,7 +97,5 @@ mat4mat4mul_loop:
     cmp     rbx, 4
     jl      mat4mat4mul_loop
     
-    ;mov     rsp, rbp
-    ;pop     rbp
     leave
     ret
