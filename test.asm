@@ -52,6 +52,7 @@ main:
     lea     rsi, [rbp - 0x40]
     lea     rdx, [rbp - 0xc0]
     call    mat4mat4mul
+    tmp:
 
     add     rsp, 0xc8
     pop     rbp

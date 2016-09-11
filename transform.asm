@@ -101,3 +101,25 @@ mat4mat4mul:
     add     rsp, 0x20
     pop     rbp
     ret
+
+translate:
+    mov     DWORD [rdi + mat4.r1 + vec4.x], 1
+    mov     DWORD [rdi + mat4.r1 + vec4.y], 0
+    mov     DWORD [rdi + mat4.r1 + vec4.z], 0
+    mov     DWORD [rdi + mat4.r1 + vec4.w], 0
+    mov     DWORD [rdi + mat4.r2 + vec4.x], 0
+    mov     DWORD [rdi + mat4.r2 + vec4.y], 1
+    mov     DWORD [rdi + mat4.r2 + vec4.z], 0
+    mov     DWORD [rdi + mat4.r2 + vec4.w], 0
+    mov     DWORD [rdi + mat4.r3 + vec4.x], 0
+    mov     DWORD [rdi + mat4.r3 + vec4.y], 0
+    mov     DWORD [rdi + mat4.r3 + vec4.z], 1
+    mov     DWORD [rdi + mat4.r3 + vec4.w], 0
+    mov     eax, DWORD [rsi + vec4.x]
+    mov     DWORD [rdi + mat4.r4 + vec4.x], eax
+    mov     eax, DWORD [rsi + vec4.y]
+    mov     DWORD [rdi + mat4.r4 + vec4.y], eax
+    mov     eax, DWORD [rsi + vec4.z]
+    mov     DWORD [rdi + mat4.r4 + vec4.z], eax
+    mov     DWORD [rdi + mat4.r4 + vec4.w], 1
+    ret

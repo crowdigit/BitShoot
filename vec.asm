@@ -74,14 +74,20 @@ mat4mat4mul_loop:
     lea     rsi, [rsi + rax * 0x4]          ; row
     lea     rdi, [rbp - 0x30]               ; column
 
-    tmp:
+    ;mov     eax, ebx
+    ;mov     r9d, 4
+    ;mul     r9d
+    ;mov     rdx, [rbp - 0x10]
+    ;lea     rdx, [rdx + 0x4 * rcx]
+    ;lea     rdx, [rdx + 0x4 * rax]
 
-    mov     eax, ebx
-    mov     r9d, 4
+    mov     eax, ecx
+    mov     r9d, 0x10
     mul     r9d
     mov     rdx, [rbp - 0x10]
-    lea     rdx, [rdx + 0x4 * rcx]
-    lea     rdx, [rdx + 0x4 * rax]
+    lea     rdx, [rdx + 0x4 * rbx]
+    lea     rdx, [rdx + rax]
+
     call    vec4dot
 
     pop     rdx

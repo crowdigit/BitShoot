@@ -9,7 +9,7 @@
 
     extern glXGetProcAddress
 
-    ;global main
+    global main
     global window
     global glClear
     global glClearColor
@@ -121,7 +121,7 @@ section .data
     
 section .text
 
-;main:
+main:
 _start:
     push    rbp
     mov     rbp, rsp
