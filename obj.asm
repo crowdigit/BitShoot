@@ -1,4 +1,5 @@
-    %include "gl.asm"
+    %include "gl.h"
+    %include "vec.h"
 
     global init_obj
     global init_square
@@ -8,29 +9,6 @@
     global render
 
     extern ortho
-
-STRUC vec3
-    .x:     resd 1
-    .y:     resd 1
-    .z:     resd 1
-    .size:
-ENDSTRUC
-
-STRUC vec4
-    .x:     resd 1
-    .y:     resd 1
-    .z:     resd 1
-    .w:     resd 1
-    .size:
-ENDSTRUC
-
-STRUC mat4
-    .r1:    resb vec4.size
-    .r2:    resb vec4.size
-    .r3:    resb vec4.size
-    .r4:    resb vec4.size
-    .size:
-ENDSTRUC
 
 STRUC obj
     .pos:   resb vec3.size

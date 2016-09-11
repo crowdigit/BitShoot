@@ -1,5 +1,4 @@
-    %include "sdl.asm"
-    %define GL_CURRENT_PROGRAM                0x8B8D
+    %include "sdl.h"
 
     extern loop
     extern LoadProgram

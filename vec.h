@@ -16,6 +16,10 @@ STRUC vec4
     .size:
 ENDSTRUC
 
-extern vec4dot
+%ifdef __VEC_SRC__
+    global vec4dot
+%elif
+    extern vec4dot
+%endif
 
 %endif

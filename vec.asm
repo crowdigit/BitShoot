@@ -1,28 +1,5 @@
-    global vec4dot
-    global mat4mat4mul
-
-    STRUC vec3
-        .x:     resd 1
-        .y:     resd 1
-        .z:     resd 1
-        .size:
-    ENDSTRUC
-
-    STRUC vec4
-        .x:     resd 1
-        .y:     resd 1
-        .z:     resd 1
-        .w:     resd 1
-        .size:
-    ENDSTRUC
-
-    STRUC mat4
-        .r1:    resb vec4.size
-        .r2:    resb vec4.size
-        .r3:    resb vec4.size
-        .r4:    resb vec4.size
-        .size:
-    ENDSTRUC
+    %define __VEC_SRC__
+    %include "vec.h"
 
 section .text
 
@@ -74,19 +51,12 @@ mat4mat4mul_loop:
     lea     rsi, [rsi + rax * 0x4]          ; row
     lea     rdi, [rbp - 0x30]               ; column
 
-    ;mov     eax, ebx
-    ;mov     r9d, 4
-    ;mul     r9d
-    ;mov     rdx, [rbp - 0x10]
-    ;lea     rdx, [rdx + 0x4 * rcx]
-    ;lea     rdx, [rdx + 0x4 * rax]
-
     mov     eax, ecx
     mov     r9d, 0x10
     mul     r9d
     mov     rdx, [rbp - 0x10]
     lea     rdx, [rdx + 0x4 * rbx]
-    lea     rdx, [rdx + rax]
+    lea     rdx, [rdx + rax]                ; result address
 
     call    vec4dot
 

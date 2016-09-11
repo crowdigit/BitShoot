@@ -1,5 +1,5 @@
-    %include "sdl.asm"
-    %include "gl.asm"
+    %include "sdl.h"
+    %include "gl.h"
     %include "obj.h"
 
     extern window

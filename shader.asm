@@ -1,4 +1,4 @@
-    %include "gl.asm"
+    %include "gl.h"
 
     %define SEEK_SET 0
     %define SEEK_END 2

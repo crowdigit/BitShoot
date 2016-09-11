@@ -1,6 +1,6 @@
 TARGET = hello
 
-OBJS = main.o loop.o shader.o obj.o error.o transform.o vec.o
+OBJS = main.o loop.o shader.o obj.o error.o transform.o vec.o gl.o
 FLAG = -felf64 -g
 
 INCDIR = -I/usr/include/SDL2
