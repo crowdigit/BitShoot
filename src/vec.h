@@ -16,10 +16,21 @@ STRUC vec4
     .size:
 ENDSTRUC
 
-%ifdef __VEC_SRC__
-    global vec4dot
-%elif
-    extern vec4dot
-%endif
+STRUC mat4
+    .r1:    resb vec4.size
+    .r2:    resb vec4.size
+    .r3:    resb vec4.size
+    .r4:    resb vec4.size
+    .size:
+ENDSTRUC
 
+    %ifdef __VEC_SRC__
+    %define INOUT global
+    %elif
+    %define INOUT extern
+    %endif
+
+    INOUT vec4dot
+    INOUT mat4mat4mul
+    
 %endif

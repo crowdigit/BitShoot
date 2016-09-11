@@ -1,26 +1,15 @@
     %include "gl.h"
     %include "vec.h"
 
-    global init_obj
-    global init_square
-    global release_square
-    global square_vao
-    global square_vbo
-    global render
+    %define __OBJ_SRC__
+    %include "obj.h"
 
     extern ortho
-
-STRUC obj
-    .pos:   resb vec3.size
-    .vao:   resd 1
-    .vbo:   resd 1
-    .size:
-ENDSTRUC
 
 section .data
     square_vao:  dd 0d0
     square_vbo:  dd 0d0
-    modelName:      db "Model", 0
+    modelName:   db "Model", 0
 
 section .text
 

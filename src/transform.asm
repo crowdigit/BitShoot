@@ -1,5 +1,8 @@
     %include "obj.h"
 
+    %define __TRANSFORM_SRC__
+    %include "transform.h"
+
     global ortho
 
 section .data
@@ -87,39 +90,25 @@ ortho:
     xor     rax, rax
     ret
 
-mat4mat4mul:
-    push    rbp
-    mov     rbp, rsp
-    sub     rsp, 0x20
-
-    mov     QWORD [rbp - 0x20], rdi
-    mov     QWORD [rbp - 0x18], rsi
-    mov     QWORD [rbp - 0x10], rdx
-
-    
-
-    add     rsp, 0x20
-    pop     rbp
-    ret
-
 translate:
-    mov     DWORD [rdi + mat4.r1 + vec4.x], 1
-    mov     DWORD [rdi + mat4.r1 + vec4.y], 0
-    mov     DWORD [rdi + mat4.r1 + vec4.z], 0
-    mov     DWORD [rdi + mat4.r1 + vec4.w], 0
-    mov     DWORD [rdi + mat4.r2 + vec4.x], 0
-    mov     DWORD [rdi + mat4.r2 + vec4.y], 1
-    mov     DWORD [rdi + mat4.r2 + vec4.z], 0
-    mov     DWORD [rdi + mat4.r2 + vec4.w], 0
-    mov     DWORD [rdi + mat4.r3 + vec4.x], 0
-    mov     DWORD [rdi + mat4.r3 + vec4.y], 0
-    mov     DWORD [rdi + mat4.r3 + vec4.z], 1
-    mov     DWORD [rdi + mat4.r3 + vec4.w], 0
+    xor     rax, rax
+    mov     DWORD [rdi + mat4.r1 + vec4.x], __float32__(1.0)
+    mov     DWORD [rdi + mat4.r1 + vec4.y], eax
+    mov     DWORD [rdi + mat4.r1 + vec4.z], eax
+    mov     DWORD [rdi + mat4.r1 + vec4.w], eax
+    mov     DWORD [rdi + mat4.r2 + vec4.x], eax
+    mov     DWORD [rdi + mat4.r2 + vec4.y], __float32__(1.0)
+    mov     DWORD [rdi + mat4.r2 + vec4.z], eax
+    mov     DWORD [rdi + mat4.r2 + vec4.w], eax
+    mov     DWORD [rdi + mat4.r3 + vec4.x], eax
+    mov     DWORD [rdi + mat4.r3 + vec4.y], eax
+    mov     DWORD [rdi + mat4.r3 + vec4.z], __float32__(1.0)
+    mov     DWORD [rdi + mat4.r3 + vec4.w], eax
     mov     eax, DWORD [rsi + vec4.x]
     mov     DWORD [rdi + mat4.r4 + vec4.x], eax
     mov     eax, DWORD [rsi + vec4.y]
     mov     DWORD [rdi + mat4.r4 + vec4.y], eax
     mov     eax, DWORD [rsi + vec4.z]
     mov     DWORD [rdi + mat4.r4 + vec4.z], eax
-    mov     DWORD [rdi + mat4.r4 + vec4.w], 1
+    mov     DWORD [rdi + mat4.r4 + vec4.w], __float32__(1.0)
     ret

@@ -1,3 +1,6 @@
+%ifndef __GL_H__
+%define __GL_H__
+
     %define GL_COLOR_BUFFER_BIT     0x4000
     %define GL_FRAGMENT_SHADER      0x8B30
     %define GL_VERTEX_SHADER        0x8B31
@@ -59,3 +62,5 @@
     INOUT glUniformMatrix4fv
     INOUT glInit
     extern glXGetProcAddress
+
+%endif

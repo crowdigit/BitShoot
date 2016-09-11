@@ -25,8 +25,9 @@ section .data
     
 section .text
 
+%ifndef TEST
 main:
-_start:
+%endif
     push    rbp
     mov     rbp, rsp
     sub     rsp, 0x10

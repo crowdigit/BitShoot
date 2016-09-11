@@ -3,20 +3,18 @@
 
 %include "vec.h"
 
-extern init_obj
-extern init_square
-extern release_square
-extern square_vao
-extern square_vbo
-extern render
+%ifdef __OBJ_SRC__
+%define INOUT global
+%elif
+%define INOUT extern
+%endif
 
-STRUC mat4
-    .r1:    resb vec4.size
-    .r2:    resb vec4.size
-    .r3:    resb vec4.size
-    .r4:    resb vec4.size
-    .size:
-ENDSTRUC
+INOUT init_obj
+INOUT init_square
+INOUT release_square
+INOUT square_vao
+INOUT square_vbo
+INOUT render
 
 STRUC obj
     .pos:   resb vec3.size
