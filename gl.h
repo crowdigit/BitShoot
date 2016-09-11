@@ -57,3 +57,5 @@
     INOUT glGetIntegerv
     INOUT glGetUniformLocation
     INOUT glUniformMatrix4fv
+    INOUT glInit
+    extern glXGetProcAddress

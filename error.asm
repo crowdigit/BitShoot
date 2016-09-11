@@ -1,6 +1,5 @@
-%include "gl.asm"
+%include "gl.h"
 
-    extern glGetError
     extern fprintf
     extern stderr
 
