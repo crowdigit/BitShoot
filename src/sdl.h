@@ -32,6 +32,7 @@ extern SDL_GL_CreateContext
 extern SDL_GL_DeleteContext
 extern SDL_GetKeyboardState
 extern SDL_GL_SetAttribute
+extern SDL_GetTicks
 
 STRUC Event
     .type:       resd 1

@@ -1,5 +1,6 @@
     %include "gl.h"
     %include "vec.h"
+    %include "transform.h"
 
     %define __OBJ_SRC__
     %include "obj.h"
@@ -7,9 +8,14 @@
     extern ortho
 
 section .data
-    square_vao:  dd 0d0
-    square_vbo:  dd 0d0
-    modelName:   db "Model", 0
+    square_vao: dd 0d0
+    square_vbo: dd 0d0
+
+    modelName:  db "Model", 0
+    projName:   db "Proj", 0
+
+    modelLoc:   dd 0d0
+    projLoc:    dd 0d0
 
 section .text
 
@@ -96,23 +102,38 @@ release_square:
 render:
     push    rbp
     mov     rbp, rsp
-    sub     rsp, 0x50
+    sub     rsp, 0xd0
 
-    mov     QWORD [rbp - 0x8], rdi
+    mov     QWORD [rbp - 0x8], rdi          ; rbp - 0x8 -> Object pointer
 
     ; Get current program
     mov     edi, GL_CURRENT_PROGRAM
-    lea     rsi, [rbp - 0x10]
+    lea     rsi, [rbp - 0x10]               ; rbp - 0x10-> Program ID
     call    [glGetIntegerv]
 
     ; Get Model matrix's location
     mov     edi, DWORD [rbp - 0x10]
     mov     rsi, modelName
     call    [glGetUniformLocation]
-    mov     DWORD [rbp - 0xc], eax
+    mov     DWORD [modelLoc], eax
+
+    ; Get Projection matrix's location
+    mov     edi, DWORD [rbp - 0x10]
+    mov     rsi, projName
+    call    [glGetUniformLocation]
+    mov     DWORD [projLoc], eax
 
     lea     rdi, [rbp - 0x50]
+    mov     rsi, [rbp - 0x8]
+    call    translate
+
+    lea     rdi, [rbp - 0x90]
     call    ortho
+
+    ; lea     rdi, [rbp - 0x90]
+    ; lea     rsi, [rbp - 0x50]
+    ; lea     rdx, [rbp - 0xd0]
+    ; call    mat4mat4mul
 
     mov     edi, DWORD [square_vao]
     call    [glBindVertexArray]
@@ -124,10 +145,22 @@ render:
     mov     esi, DWORD [square_vbo]
     call    [glBindBuffer]
 
-    mov     edi, [rbp - 0xc]
+    ; mov     edi, [rbp - 0xd4]
+    ; mov     esi, 1
+    ; xor     rdx, rdx
+    ; lea     rcx, [rbp - 0xd0]
+    ; call    [glUniformMatrix4fv]
+
+    mov     edi, [modelLoc]
     mov     esi, 1
-    mov     rdx, 1
+    xor     rdx, rdx
     lea     rcx, [rbp - 0x50]
+    call    [glUniformMatrix4fv]
+
+    mov     edi, [projLoc]
+    mov     esi, 1
+    xor     rdx, rdx
+    lea     rcx, [rbp - 0x90]
     call    [glUniformMatrix4fv]
 
     mov     edi, GL_TRIANGLES
@@ -141,6 +174,5 @@ render:
     xor     rdi, rdi
     call    [glBindVertexArray]
 
-    add     rsp, 0x50
-    pop     rbp
+    leave
     ret

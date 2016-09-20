@@ -2,6 +2,8 @@
 %define __OBJ_H__
 
 %include "vec.h"
+%include "sdl.h"
+%include "seg.h"
 
 %ifdef __OBJ_SRC__
 %define INOUT global

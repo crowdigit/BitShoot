@@ -1,6 +1,8 @@
     %define __VEC_SRC__
     %include "vec.h"
 
+    extern sqrtf
+
 section .text
 
 vec4dot:
@@ -73,5 +75,42 @@ mat4mat4mul_loop:
     cmp     rbx, 4
     jl      mat4mat4mul_loop
     
+    leave
+    ret
+
+vec3normalize:
+    push    rbp
+    mov     rbp, rsp
+    sub     rsp, 0x10
+
+    fld     DWORD [rdi + vec3.x]
+    fmul    st0
+    fld     DWORD [rdi + vec3.y]
+    fmul    st0
+    fld     DWORD [rdi + vec3.z]
+    fmul    st0
+    faddp
+    faddp
+
+    fstp    DWORD [rbp - 0x10]
+    movss   xmm0, DWORD [rbp - 0x10]
+    call    sqrtf
+    movss   DWORD [rbp - 0x10], xmm0
+
+    fld     DWORD [rdi + vec3.x]
+    fld     DWORD [rbp - 0x10]
+    fdivp
+    fstp    DWORD [rsi + vec3.x]
+
+    fld     DWORD [rdi + vec3.y]
+    fld     DWORD [rbp - 0x10]
+    fdivp
+    fstp    DWORD [rsi + vec3.y]
+
+    fld     DWORD [rdi + vec3.z]
+    fld     DWORD [rbp - 0x10]
+    fdivp
+    fstp    DWORD [rsi + vec3.z]
+
     leave
     ret

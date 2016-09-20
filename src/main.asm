@@ -32,7 +32,7 @@ main:
     mov     rbp, rsp
     sub     rsp, 0x10
 
-    ;   Initializing: SDL2
+    ;   Initializing SDL2
     mov     rdi, SDL_INIT_EVERYTHING
     call    SDL_Init
     cmp     rax, 0
@@ -50,8 +50,8 @@ main:
     mov     rdi, title
     mov     rsi, SDL_WINDOWPOS_CENTERED
     mov     rdx, SDL_WINDOWPOS_CENTERED
-    mov     rcx, 640
-    mov     r8, 480
+    mov     rcx, 1024
+    mov     r8, 768
     mov     r9, SDL_WINDOW_SHOWN
     or      r9, SDL_WINDOW_OPENGL
     call    SDL_CreateWindow

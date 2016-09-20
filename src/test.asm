@@ -11,18 +11,16 @@ main:
 %endif
     push    rbp
     mov     rbp, rsp
-    sub     rsp, 0x50
+    sub     rsp, 0x20
 
-    mov     DWORD [rbp - 0x50 + vec3.x], __float32__(1.0)
-    mov     DWORD [rbp - 0x50 + vec3.y], __float32__(1.0)
-    mov     DWORD [rbp - 0x50 + vec3.z], __float32__(1.0)
+    mov     DWORD [rbp - 0xc], __float32__(1.0)
+    mov     DWORD [rbp - 0x8], __float32__(2.0)
+    mov     DWORD [rbp - 0x4], __float32__(3.0)
 
-    lea     rdi, [rbp - 0x40]
-    lea     rsi, [rbp - 0x50]
-    tmp:
-    call    translate
+    lea     rdi, [rbp - 0xc]
+    lea     rsi, [rbp - 0x18]
+    call    vec3normalize
 
-    add     rsp, 0x50
-    pop     rbp
+    leave
     xor     rax, rax
     ret

@@ -18,14 +18,13 @@ section .text
 ortho:
     push    rbp
     mov     rbp, rsp
-    sub     rsp, 0x8
-
+    sub     rsp, 0x10
     mov     DWORD [rbp - 0x4], 0x2
 
     xor     rax, rax
 
     ; first row
-
+    
     fild    DWORD [rbp - 0x4]
     fld     DWORD [right]
     fsub    DWORD [left]
@@ -50,10 +49,12 @@ ortho:
 
     mov     DWORD [rdi + mat4.r3 + vec4.x], eax
     mov     DWORD [rdi + mat4.r3 + vec4.y], eax
+
     fild    DWORD [rbp - 0x4]
     fld     DWORD [zFar]
     fsub    DWORD [zNear]
     fdivp
+    fchs
     fstp    DWORD [rdi + mat4.r3 + vec4.z]
     mov     DWORD [rdi + mat4.r3 + vec4.w], eax
 
@@ -64,30 +65,28 @@ ortho:
     fld     DWORD [right]
     fsub    DWORD [left]
     fdivp
+    fchs
     fstp    DWORD [rdi + mat4.r4 + vec4.x]
-    neg     DWORD [rdi + mat4.r4 + vec4.x]
 
     fld     DWORD [top]
     fadd    DWORD [bottom]
     fld     DWORD [top]
     fsub    DWORD [bottom]
     fdivp
+    fchs
     fstp    DWORD [rdi + mat4.r4 + vec4.y]
-    neg     DWORD [rdi + mat4.r4 + vec4.y]
 
     fld     DWORD [zFar]
     fadd    DWORD [zNear]
     fld     DWORD [zFar]
     fsub    DWORD [zNear]
     fdivp
+    fchs
     fstp    DWORD [rdi + mat4.r4 + vec4.z]
-    neg     DWORD [rdi + mat4.r4 + vec4.z]
 
     mov     DWORD [rdi + mat4.r4 + vec4.w], __float32__(1.0)
 
-    add     rsp, 0x8
-    pop     rbp
-    xor     rax, rax
+    leave
     ret
 
 translate:
@@ -104,11 +103,11 @@ translate:
     mov     DWORD [rdi + mat4.r3 + vec4.y], eax
     mov     DWORD [rdi + mat4.r3 + vec4.z], __float32__(1.0)
     mov     DWORD [rdi + mat4.r3 + vec4.w], eax
-    mov     eax, DWORD [rsi + vec4.x]
+    mov     eax, DWORD [rsi + vec3.x]
     mov     DWORD [rdi + mat4.r4 + vec4.x], eax
-    mov     eax, DWORD [rsi + vec4.y]
+    mov     eax, DWORD [rsi + vec3.y]
     mov     DWORD [rdi + mat4.r4 + vec4.y], eax
-    mov     eax, DWORD [rsi + vec4.z]
+    mov     eax, DWORD [rsi + vec3.z]
     mov     DWORD [rdi + mat4.r4 + vec4.z], eax
     mov     DWORD [rdi + mat4.r4 + vec4.w], __float32__(1.0)
     ret

@@ -4,27 +4,27 @@ BIN = ./bin
 OUT = ./out
 SRC = ./src
 
-OBJS = main.o loop.o shader.o obj.o error.o transform.o vec.o gl.o
+OBJS = main.o loop.o shader.o obj.o error.o transform.o vec.o gl.o player.o
 FLAG = -felf64 -g
 
 INCDIR = -I/usr/include/SDL2
 LINKIN = -lSDL2main -lSDL2 -lGL
 
-all : setEntry $(addprefix $(BIN)/, $(OBJS))
+all : $(addprefix $(BIN)/, $(OBJS))
 	@echo ----- Linking
 	@echo		$(OBJS)
 	@g++ $(addprefix $(BIN)/, $(OBJS)) -o $(OUT)/$(TARGET) $(LINKIN)
 	@echo ----- Used flags
 	@echo $(FLAG)
 
-test : setEntry testflag $(addprefix $(BIN)/, $(OBJS)) $(addprefix $(BIN)/, test.o)
+test : testflag $(addprefix $(BIN)/, $(OBJS)) $(addprefix $(BIN)/, test.o)
 	@echo ----- Linking
 	@echo		$(OBJS) test.o
 	@g++ $(addprefix $(BIN)/, $(OBJS)) $(addprefix $(BIN)/, test.o) -o $(OUT)/$(TARGET) $(LINKIN)
 	@echo ----- Used flags
 	@echo $(FLAG)
 
-setEntry:
+cleanEntry:
 	@rm $(addprefix $(BIN)/, main.o test.o) | true
 	@echo ----- Removed main.o, test.o
 
