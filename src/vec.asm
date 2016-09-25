@@ -114,3 +114,28 @@ vec3normalize:
 
     leave
     ret
+
+vec3floatmul:
+    push    rbp
+    mov     rbp, rsp
+    sub     rsp, 0x4
+
+    mov     DWORD [rbp - 0x4], esi
+    fld     DWORD [rbp - 0x4]
+
+    fld     DWORD [rdi + vec3.x]
+    fmul    st0, st1
+    fstp    DWORD [rdx + vec3.x]
+
+    fld     DWORD [rdi + vec3.y]
+    fmul    st0, st1
+    fstp    DWORD [rdx + vec3.y]
+
+    fld     DWORD [rdi + vec3.z]
+    fmul    st0, st1
+    fstp    DWORD [rdx + vec3.z]
+
+    fstp    DWORD [rbp - 0x4]
+
+    leave
+    ret

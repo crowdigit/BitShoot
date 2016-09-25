@@ -4,6 +4,7 @@
 %include "vec.h"
 %include "sdl.h"
 %include "seg.h"
+%include "step.h"
 
 %ifdef __OBJ_SRC__
 %define INOUT global

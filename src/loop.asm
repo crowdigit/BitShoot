@@ -1,23 +1,21 @@
     %include "sdl.h"
     %include "gl.h"
     %include "player.h"
+    %include "step.h"
 
     extern window
     extern program
     extern ortho
 
-    extern printf
-
     global loop
 
 section .data
-    player:     ISTRUC obj
-                at obj.pos + vec3.x, dd 0
-                at obj.pos + vec3.y, dd 0
-                at obj.pos + vec3.z, dd 0
+    player:     ISTRUC Player
+                at Player.pos + vec3.x, dd 0
+                at Player.pos + vec3.y, dd 0
+                at Player.pos + vec3.z, dd 0
+                at Player.speed, dd __float32__(0.02)
                 IEND
-    tick:       dd 0
-    step:       dd 0
 
 section .text
 
@@ -77,16 +75,4 @@ loop:
 
     leave
     xor     rax, rax
-    ret
-
-calcStep:
-    push    rbp
-    mov     rbp, rsp
-    sub     rsp, 0x10
-
-    call    SDL_GetTicks
-    sub     eax, DWORD [tick]
-    mov     DWORD [step], eax
-
-    leave
     ret

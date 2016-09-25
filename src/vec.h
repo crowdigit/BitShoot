@@ -33,5 +33,6 @@ ENDSTRUC
     INOUT vec4dot
     INOUT mat4mat4mul
     INOUT vec3normalize
+    INOUT vec3floatmul
     
 %endif

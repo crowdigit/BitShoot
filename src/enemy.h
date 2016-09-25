@@ -1,5 +1,5 @@
-%ifndef __PLAYER_H__
-%define __PLAYER_H__
+%ifndef __ENEMY_H__
+%define __ENEMY_H__
 
 %include "obj.h"
 
@@ -9,15 +9,11 @@
 %define INOUT extern
 %endif
 
-STRUC Player
+STRUC Enemy
     .pos:   resb vec3.size
     .vao:   resd 1
     .vbo:   resd 1
-    .speed: resd 1
     .size:
 ENDSTRUC
-
-
-INOUT playerUpdate
 
 %endif

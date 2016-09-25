@@ -4,7 +4,7 @@ BIN = ./bin
 OUT = ./out
 SRC = ./src
 
-OBJS = main.o loop.o shader.o obj.o error.o transform.o vec.o gl.o player.o
+OBJS = main.o loop.o shader.o obj.o error.o transform.o vec.o gl.o player.o step.o
 FLAG = -felf64 -g
 
 INCDIR = -I/usr/include/SDL2

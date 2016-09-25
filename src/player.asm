@@ -70,16 +70,27 @@ playerUpdate:
             push    rsi
             lea     rdi, [rbp - 0x14]
             lea     rsi, [rbp - 0x20]
-            call    vec3normalize
+            call    vec3normalize       ; normalized vector is at [rbp - 0x20]
 
-            pop     rsi
-            pop     rdi
+            call    calcStep
+            fild    DWORD [stepi]
+            mov     rax, [rsp + 0x8]
+            fmul    DWORD [rax + Player.speed]
+            fstp    DWORD [rbp - 0x14]  ; frame indepent speed
 
-            fld     DWORD [rbp - 0x20 + vec3.x]
+            lea     rdi, [rbp - 0x20]
+            mov     esi, DWORD [rbp - 0x14]
+            lea     rdx, [rbp - 0x14]
+            call    vec3floatmul        ; calculated velocity vector(3) is at [rbp - 0x14]
+
+            pop     rsi                 ; kb pointer
+            pop     rdi                 ; player pointer
+
+            fld     DWORD [rbp - 0x14 + vec3.x]
             fadd    DWORD [rdi + obj.pos + vec3.x]
             fstp    DWORD [rdi + obj.pos + vec3.x]
 
-            fld     DWORD [rbp - 0x20 + vec3.y]
+            fld     DWORD [rbp - 0x14 + vec3.y]
             fadd    DWORD [rdi + obj.pos + vec3.y]
             fstp    DWORD [rdi + obj.pos + vec3.y]
 
