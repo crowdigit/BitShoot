@@ -40,6 +40,8 @@ section .data
     fnBindBuffer:           db "glBindBuffer", 0
     glBufferData:           dq 0x0
     fnBufferData:           db "glBufferData", 0
+    glBufferSubData:        dq 0x0
+    fnBufferSubData:        db "glBufferSubData", 0
     glDeleteBuffers:        dq 0x0
     fnDeleteBuffers:        db "glDeleteBuffers", 0
     glGenVertexArrays:      dq 0x0
@@ -64,7 +66,16 @@ section .data
     fnGetUniformLocation:   db "glGetUniformLocation", 0
     glUniformMatrix4fv:     dq 0x0
     fnUniformMatrix4fv:     db "glUniformMatrix4fv", 0
-
+    glTexImage2D:           dq 0x0
+    fnTexImage2D:           db "glTexImage2D", 0
+    glGenTextures:          dq 0x0
+    fnGenTextures:          db "glGenTextures", 0
+    glDeleteTextures:       dq 0x0
+    fnDeleteTextures:       db "glDeleteTextures", 0
+    glBindTexture:          dq 0x0
+    fnBindTexture:          db "glBindTexture", 0
+    glTexParameteri:        dq 0x0
+    fnTexParameteri:        db "glTexParameteri", 0
 
 section .text
 
@@ -149,6 +160,10 @@ glInit:
     call    glXGetProcAddress
     mov     QWORD [glBufferData], rax
 
+    mov     rdi, fnBufferSubData
+    call    glXGetProcAddress
+    mov     QWORD [glBufferSubData], rax
+
     mov     rdi, fnDeleteBuffers
     call    glXGetProcAddress
     mov     QWORD [glDeleteBuffers], rax
@@ -196,5 +211,25 @@ glInit:
     mov     rdi, fnUniformMatrix4fv
     call    glXGetProcAddress
     mov     QWORD [glUniformMatrix4fv], rax
+
+    mov     rdi, fnTexImage2D
+    call    glXGetProcAddress
+    mov     QWORD [glTexImage2D], rax
+
+    mov     rdi, fnGenTextures
+    call    glXGetProcAddress
+    mov     QWORD [glGenTextures], rax
+
+    mov     rdi, fnDeleteTextures
+    call    glXGetProcAddress
+    mov     QWORD [glDeleteTextures], rax
+
+    mov     rdi, fnBindTexture
+    call    glXGetProcAddress
+    mov     QWORD [glBindTexture], rax
+
+    mov     rdi, fnTexParameteri
+    call    glXGetProcAddress
+    mov     QWORD [glTexParameteri], rax
 
     ret

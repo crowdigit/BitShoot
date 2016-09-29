@@ -1,8 +1,16 @@
 #version 330
 
+struct Segment {
+    vec2 uv;
+};
+
 layout (location = 0) in vec3 vertex;
+layout (location = 1) in vec2 uv;
+
 uniform mat4 Proj;
 uniform mat4 Model;
+
+out Segment vtf;
 
 mat4 Scale(vec3 s) {
     return mat4(
@@ -23,4 +31,6 @@ void main() {
     pos.x = ClampToGrid(1.0, pos.x);
     pos.y = ClampToGrid(1.0, pos.y);
     gl_Position = Proj * pos;
+
+    vtf.uv = uv;
 }

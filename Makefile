@@ -4,11 +4,11 @@ BIN = ./bin
 OUT = ./out
 SRC = ./src
 
-OBJS = main.o loop.o shader.o obj.o error.o transform.o vec.o gl.o player.o step.o
+OBJS = main.o loop.o shader.o obj.o error.o transform.o vec.o gl.o player.o step.o tex.o
 FLAG = -felf64 -g
 
 INCDIR = -I/usr/include/SDL2
-LINKIN = -lSDL2main -lSDL2 -lGL
+LINKIN = -lSDL2main -lSDL2 -lSDL2_image -lGL
 
 all : $(addprefix $(BIN)/, $(OBJS))
 	@echo ----- Linking

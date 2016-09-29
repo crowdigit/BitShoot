@@ -6,6 +6,7 @@
     %include "obj.h"
 
     extern ortho
+    extern printf
 
 section .data
     square_vao: dd 0d0
@@ -17,12 +18,14 @@ section .data
     modelLoc:   dd 0d0
     projLoc:    dd 0d0
 
+    err:        dd "%d", 10, 0
+
 section .text
 
 init_square:
     push    rbp
     mov     rbp, rsp
-    sub     rsp, 0x48
+    sub     rsp, 0x78
 
     mov     DWORD [rbp - 0x48], __float32__(-0.5)
     mov     DWORD [rbp - 0x44], __float32__(-0.5)
@@ -48,6 +51,24 @@ init_square:
     mov     DWORD [rbp - 0x8], __float32__(-0.5)
     mov     DWORD [rbp - 0x4], __float32__(0.0)
 
+    mov     DWORD [rbp - 0x78], __float32__(0.0)
+    mov     DWORD [rbp - 0x74], __float32__(0.0)
+
+    mov     DWORD [rbp - 0x70], __float32__(0.0)
+    mov     DWORD [rbp - 0x6c], __float32__(1.0)
+
+    mov     DWORD [rbp - 0x68], __float32__(1.0)
+    mov     DWORD [rbp - 0x64], __float32__(0.0)
+
+    mov     DWORD [rbp - 0x60], __float32__(1.0)
+    mov     DWORD [rbp - 0x5c], __float32__(1.0)
+
+    mov     DWORD [rbp - 0x58], __float32__(0.0)
+    mov     DWORD [rbp - 0x54], __float32__(1.0)
+
+    mov     DWORD [rbp - 0x50], __float32__(1.0)
+    mov     DWORD [rbp - 0x4c], __float32__(0.0)
+
     mov     edi, 1
     mov     rsi, square_vao
     call    [glGenVertexArrays]
@@ -69,12 +90,32 @@ init_square:
     mov     rcx, GL_STATIC_DRAW
     call    [glBufferData]
 
+    mov     rdi, GL_ARRAY_BUFFER
+    mov     rsi, 0d72
+    mov     rdx, 0d48
+    lea     rcx, [rbp - 0x78]
+    call    [glBufferSubData]
+
+    call    [glGetError]
+    mov     rsi, rax
+    mov     rdi, err
+    xor     rax, rax
+    call    printf
+
     mov     rdi, 0
     mov     rsi, 3
     mov     rdx, GL_FLOAT
     xor     rcx, rcx
     mov     r8, 12
     xor     r9, r9
+    call    [glVertexAttribPointer]
+
+    mov     rdi, 1
+    mov     rsi, 2
+    mov     rdx, GL_FLOAT
+    xor     rcx, rcx
+    mov     r8, 8
+    mov     r9, 0d72
     call    [glVertexAttribPointer]
 
     xor     rdi, rdi
@@ -84,9 +125,8 @@ init_square:
     xor     rsi, rsi
     call    [glBindBuffer]
 
-    add     rsp, 0x48
-    pop     rbp
     xor     rax, rax
+    leave
     ret
 
 release_square:
@@ -140,6 +180,9 @@ render:
 
     xor     rdi, rdi
     call    [glEnableVertexAttribArray]
+
+    mov     rdi, 1
+    call    [glEnableVertexAttribArray]
     
     mov     edi, GL_ARRAY_BUFFER
     mov     esi, DWORD [square_vbo]
@@ -169,6 +212,9 @@ render:
     call    [glDrawArrays]
 
     xor     rdi, rdi
+    call    [glDisableVertexAttribArray]
+
+    mov     rdi, 1
     call    [glDisableVertexAttribArray]
 
     xor     rdi, rdi

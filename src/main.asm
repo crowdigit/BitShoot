@@ -1,5 +1,6 @@
     %include "sdl.h"
     %include "gl.h"
+    %include "tex.h"
 
     extern loop
     extern LoadProgram
@@ -19,9 +20,13 @@ section .data
     window:     dq 0x0
     context:    dq 0x0
     program:    dd 0d0
+    initflag:   dd 0d1
 
     vert:       db "./shader/vert.glsl", 0
     frag:       db "./shader/frag.glsl", 0
+    tex:        db "./res/light.png", 0
+
+    testTex:    db 0x0
     
 section .text
 
@@ -36,6 +41,11 @@ main:
     mov     rdi, SDL_INIT_EVERYTHING
     call    SDL_Init
     cmp     rax, 0
+    jne     fail
+
+    mov     rdi, IMG_INIT_PNG
+    call    IMG_Init
+    cmp     rax, IMG_INIT_PNG
     jne     fail
 
     mov     rdi, SDL_GL_CONTEXT_MAJOR_VERSION
@@ -71,20 +81,37 @@ main:
 
     call    glInit
 
+    tmp:
+
     mov     rdi, vert
     mov     rsi, frag
+    lea     rdx, [initflag]
     call    LoadProgram
     mov     DWORD [program], eax
+    
+    cmp     DWORD [initflag], 1
+    jne     rel_a
     
     mov     rdi, rax
     call    [glUseProgram]
 
+    mov     rdi, tex
+    call    LoadTexture
+    mov     DWORD [testTex], eax
+
     call    init_square
     call    loop
+
+rel_a:
     call    release_square
 
     mov     edi, program
     call    [glDeleteProgram]
+    
+    mov     rdi, 1
+    lea     esi, [testTex]
+    call    [glDeleteTextures]
+
 
     jmp     release
 
@@ -106,8 +133,8 @@ release:
     call    SDL_DestroyWindow
 
     ;   Releasing
+    call    IMG_Quit
     call    SDL_Quit
-    jmp     quit
 
 quit:
     add     rsp, 0x10

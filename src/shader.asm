@@ -29,6 +29,8 @@ LoadProgram:
     mov     rbp, rsp
     sub     rsp, 0x40
 
+    mov     QWORD [rbp - 0x40], rdx
+
     mov     QWORD [rbp - 0x8], rdi      ; store vertex shader filename
     mov     QWORD [rbp - 0x10], rsi     ; store fragment shader filename
 
@@ -55,6 +57,9 @@ loop_openfile:
     jne     openfile_ok
     
     ; openfile_fail:
+
+    mov     rax, [rbp - 0x40]
+    mov     DWORD [rax], 0
 
     mov     rdi, [stderr]
     mov     rsi, fail_open
@@ -120,6 +125,9 @@ openfile_ok:
     je      compile_ok
 
     ; If compiling failed
+
+    mov     rdi, QWORD [rbp - 0x40]
+    mov     DWORD [rdi], 0
 
     mov     edi, DWORD [rbp - 0x38]
     mov     rsi, GL_INFO_LOG_LENGTH
@@ -221,6 +229,5 @@ loop_release:
     jg      loop_release
 
     mov     eax, DWORD [rbp - 0x14]
-    add     rsp, 0x40
-    pop     rbp
+    leave
     ret

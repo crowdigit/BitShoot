@@ -33,10 +33,35 @@ extern SDL_GL_DeleteContext
 extern SDL_GetKeyboardState
 extern SDL_GL_SetAttribute
 extern SDL_GetTicks
+extern SDL_FreeSurface
 
 STRUC Event
-    .type:       resd 1
-    .padding:    resb 52
+    .type:      resd 1
+    .padding:   resb 52
+    .size:
+ENDSTRUC
+
+STRUC Rect
+    .x:         resd 1
+    .y:         resd 1
+    .w:         resd 1
+    .h:         resd 1
+    .size:
+ENDSTRUC
+
+STRUC Surface
+    .flags:     resd 1
+    .format:    resq 1
+    .w:         resd 1
+    .h:         resd 1
+    .pitch:     resd 1
+    .pixels:    resq 1
+    .userdata:  resq 1
+    .locked:    resd 1
+    .lock_data: resq 1
+    .clip_rect: resb Rect.size
+    .map:       resq 1
+    .refcount:  resd 1
     .size:
 ENDSTRUC
 
@@ -303,5 +328,16 @@ ENDSTRUC
 
 %define SDL_GL_CONTEXT_MAJOR_VERSION 0x11
 %define SDL_GL_CONTEXT_MINOR_VERSION 0x12
+
+; SDL_Image
+
+%define IMG_INIT_JPG 0x00000001
+%define IMG_INIT_PNG 0x00000002
+%define IMG_INIT_TIF 0x00000004
+%define IMG_INIT_WEBP 0x00000008
+
+extern IMG_Init
+extern IMG_Quit
+extern IMG_Load
 
 %endif
