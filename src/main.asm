@@ -7,6 +7,7 @@
     extern init_obj
     extern init_square
     extern release_square
+    global tmp_tex
 
     global main
     global window
@@ -26,7 +27,7 @@ section .data
     frag:       db "./shader/frag.glsl", 0
     tex:        db "./res/light.png", 0
 
-    testTex:    db 0x0
+    tmp_tex:    dd 0x0
     
 section .text
 
@@ -81,8 +82,6 @@ main:
 
     call    glInit
 
-    tmp:
-
     mov     rdi, vert
     mov     rsi, frag
     lea     rdx, [initflag]
@@ -97,7 +96,7 @@ main:
 
     mov     rdi, tex
     call    LoadTexture
-    mov     DWORD [testTex], eax
+    mov     DWORD [tmp_tex], eax
 
     call    init_square
     call    loop
@@ -109,7 +108,7 @@ rel_a:
     call    [glDeleteProgram]
     
     mov     rdi, 1
-    lea     esi, [testTex]
+    lea     esi, [tmp_tex]
     call    [glDeleteTextures]
 
 

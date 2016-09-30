@@ -64,7 +64,7 @@ load_succ:
 
     mov     rdi, GL_TEXTURE_2D
     mov     rsi, GL_TEXTURE_MIN_FILTER
-    mov     rdx, GL_NEAREST
+    mov     rdx, GL_LINEAR
     call    [glTexParameteri]
 
     mov     rdi, QWORD [rbp - 0x14]

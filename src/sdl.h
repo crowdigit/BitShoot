@@ -52,9 +52,11 @@ ENDSTRUC
 STRUC Surface
     .flags:     resd 1
     .format:    resq 1
+    .wtfisthis  resd 1
     .w:         resd 1
     .h:         resd 1
     .pitch:     resd 1
+    .wtf        resd 1
     .pixels:    resq 1
     .userdata:  resq 1
     .locked:    resd 1

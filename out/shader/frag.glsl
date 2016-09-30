@@ -5,10 +5,9 @@ struct Segment {
 };
 
 out vec4 color;
-
 in Segment vtf;
+uniform sampler2D tex;
 
 void main() {
-    // color = vec4(1.0, 0.0, 0.0, 1.0);
-    color = vec4(vtf.uv, 1.0, 1.0);
+    color = texture(tex, vtf.uv);
 }

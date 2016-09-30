@@ -6,7 +6,7 @@
     %include "obj.h"
 
     extern ortho
-    extern printf
+    extern tmp_tex
 
 section .data
     square_vao: dd 0d0
@@ -17,8 +17,6 @@ section .data
 
     modelLoc:   dd 0d0
     projLoc:    dd 0d0
-
-    err:        dd "%d", 10, 0
 
 section .text
 
@@ -85,22 +83,22 @@ init_square:
     call    [glBindBuffer]
 
     mov     rdi, GL_ARRAY_BUFFER
-    mov     rsi, 0d72
-    lea     rdx, [rbp - 0x48]
+    mov     rsi, 0d120
+    xor     rdx, rdx
     mov     rcx, GL_STATIC_DRAW
     call    [glBufferData]
+
+    mov     rdi, GL_ARRAY_BUFFER
+    mov     rsi, 0d0
+    mov     rdx, 0d72
+    lea     rcx, [rbp - 0x48]
+    call    [glBufferSubData]
 
     mov     rdi, GL_ARRAY_BUFFER
     mov     rsi, 0d72
     mov     rdx, 0d48
     lea     rcx, [rbp - 0x78]
     call    [glBufferSubData]
-
-    call    [glGetError]
-    mov     rsi, rax
-    mov     rdi, err
-    xor     rax, rax
-    call    printf
 
     mov     rdi, 0
     mov     rsi, 3
@@ -170,11 +168,6 @@ render:
     lea     rdi, [rbp - 0x90]
     call    ortho
 
-    ; lea     rdi, [rbp - 0x90]
-    ; lea     rsi, [rbp - 0x50]
-    ; lea     rdx, [rbp - 0xd0]
-    ; call    mat4mat4mul
-
     mov     edi, DWORD [square_vao]
     call    [glBindVertexArray]
 
@@ -188,12 +181,6 @@ render:
     mov     esi, DWORD [square_vbo]
     call    [glBindBuffer]
 
-    ; mov     edi, [rbp - 0xd4]
-    ; mov     esi, 1
-    ; xor     rdx, rdx
-    ; lea     rcx, [rbp - 0xd0]
-    ; call    [glUniformMatrix4fv]
-
     mov     edi, [modelLoc]
     mov     esi, 1
     xor     rdx, rdx
@@ -206,10 +193,18 @@ render:
     lea     rcx, [rbp - 0x90]
     call    [glUniformMatrix4fv]
 
+    mov     rdi, GL_TEXTURE_2D
+    mov     esi, DWORD [tmp_tex]
+    call    [glBindTexture]
+
     mov     edi, GL_TRIANGLES
     xor     rsi, rsi
     mov     edx, 12
     call    [glDrawArrays]
+
+    mov     rdi, GL_TEXTURE_2D
+    mov     esi, 0
+    call    [glBindTexture]
 
     xor     rdi, rdi
     call    [glDisableVertexAttribArray]

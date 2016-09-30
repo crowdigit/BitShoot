@@ -72,6 +72,7 @@
     %define GL_T					0x2001
     %define GL_R					0x2002
     %define GL_Q					0x2003
+    %define GL_LINEAR				0x2601
 
 
     %ifdef __GL_SRC__
