@@ -14,10 +14,13 @@ STRUC Player
     .vao:   resd 1
     .vbo:   resd 1
     .speed: resd 1
+    .index: resd 1
+    .timer: resd 1
     .size:
 ENDSTRUC
 
 
 INOUT playerUpdate
+INOUT setPlayer
 
 %endif

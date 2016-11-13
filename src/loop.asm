@@ -6,6 +6,8 @@
     extern window
     extern program
     extern ortho
+    extern dead
+    extern time
 
     global loop
 
@@ -15,6 +17,8 @@ section .data
                 at Player.pos + vec3.y, dd 0
                 at Player.pos + vec3.z, dd 0
                 at Player.speed, dd __float32__(0.02)
+                at Player.index, dd 0
+                at Player.timer, dd 0
                 IEND
 
 section .text
@@ -34,6 +38,17 @@ loop:
     mov     DWORD [rbp - 0x4c], __float32__(1.0)
     
     loop_event:
+        cmp     BYTE [player + Player.index], 1
+        jne     aaa
+        
+        call    SDL_GetTicks
+        sub     eax, DWORD [time]
+        cmp     eax, 300
+
+        jge    case_quit
+
+        aaa:
+
         lea     rdi, [rbp - 0x38]
         call    SDL_PollEvent
         cmp     rax, 0
@@ -45,7 +60,7 @@ loop:
 
         case_quit:
             mov     BYTE [rbp - 0x39], 0
-            jmp     loop_event
+            jmp     loop_main
 
     loop_main:
         mov     rdi, player

@@ -27,7 +27,7 @@ float ClampToGrid(float stride, float num) {
 }
 
 void main() {
-    vec4 pos = Model * Scale(vec3(30.0, 30.0, 30.0)) * vec4(vertex, 1.0);
+    vec4 pos = Model * Scale(vec3(80.0, 80.0, 80.0)) * vec4(vertex, 1.0);
     gl_Position = Proj * pos;
     pos.x = ClampToGrid(1.0, pos.x);
     pos.y = ClampToGrid(1.0, pos.y);

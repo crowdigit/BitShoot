@@ -46,14 +46,14 @@ load_succ:
 
     mov     rdi, GL_TEXTURE_2D
     xor     rsi, rsi
-    mov     rdx, GL_RGBA
+    mov     rdx, GL_RGB
     mov     rax, QWORD [rbp - 0x14]
     mov     ecx, DWORD [rax + Surface.w]
     mov     r8d, DWORD [rax + Surface.h]
     xor     r9d, r9d
     push    QWORD [rax + Surface.pixels]
     push    GL_UNSIGNED_BYTE
-    push    GL_RGBA
+    push    GL_RGB
     call    [glTexImage2D]
     add     rsp, 0x18
 

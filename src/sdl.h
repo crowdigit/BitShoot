@@ -19,6 +19,7 @@
 %define SDL_WINDOW_ALLOW_HIGHDPI 0x00002000
 %define SDL_WINDOW_MOUSE_CAPTURE 0x00004000
 %define SDL_QUIT 0x100
+%define SDL_PIXELFORMAT_RGBA4444 0x15421002
 
 extern printf
 extern SDL_Init
@@ -34,6 +35,7 @@ extern SDL_GetKeyboardState
 extern SDL_GL_SetAttribute
 extern SDL_GetTicks
 extern SDL_FreeSurface
+extern SDL_GetMouseState
 
 STRUC Event
     .type:      resd 1

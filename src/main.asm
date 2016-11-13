@@ -25,9 +25,13 @@ section .data
 
     vert:       db "./shader/vert.glsl", 0
     frag:       db "./shader/frag.glsl", 0
-    tex:        db "./res/light.png", 0
+    tex:        db "./res/icont.png", 0
+    die:        db "./res/over.png", 0
 
-    tmp_tex:    dd 0x0
+    tmp_tex:
+                dd 0x0
+                dd 0x0
+                dd 0x0
     
 section .text
 
@@ -96,7 +100,11 @@ main:
 
     mov     rdi, tex
     call    LoadTexture
-    mov     DWORD [tmp_tex], eax
+    mov     DWORD [tmp_tex + 0x0], eax
+
+    mov     rdi, die
+    call    LoadTexture
+    mov     DWORD [tmp_tex + 0x4], eax
 
     call    init_square
     call    loop
@@ -109,6 +117,10 @@ rel_a:
     
     mov     rdi, 1
     lea     esi, [tmp_tex]
+    call    [glDeleteTextures]
+    
+    mov     rdi, 1
+    lea     esi, [tmp_tex + 0x4]
     call    [glDeleteTextures]
 
 
